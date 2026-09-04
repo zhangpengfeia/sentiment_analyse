@@ -76,6 +76,7 @@ class LLMClient:
         """完整文本生成：底层采用流式规避网关超时，外层重试防御网络闪断。"""
         llm = self._build_chat_model(is_structured=False, **kwargs)
         text_chunks = []
+        # 流式获取拼接成完整文本。任务都大量切复杂时，使用ainvoke方法会导致模型网关超时，什么都拿不到数据，
         async for chunk in llm.astream(_format_messages(system_prompt, user_prompt)):
             text = chunk.text
             if text:
@@ -135,6 +136,13 @@ async def main_test():
                                    user_prompt="我叫Tom,今年18岁，最喜欢打篮球")
     print(res)
 
+@with_retry
+async def main_error_test():
+    try:
+        i=1 / 0
+    except ZeroDivisionError as e:
+        raise e
+
 
 if __name__ == '__main__':
-    asyncio.run(main_test())
+    asyncio.run(main_error_test())

@@ -1,3 +1,5 @@
+from engines.common.eventing.publishers import pub_role_result
+from engines.common.eventing.event import RoleResultEvent
 from engines.common.eventing.event import RoleProgressEvent
 from engines.common.eventing.publishers import pub_role_progress
 from fastapi import logger
@@ -34,12 +36,17 @@ async def _run_research_task(query: str, role: str) -> None:
     职责：运行一个维度查询的Agent
     """
     with route_logs_by_role(role):
+        # 初始化单独调用一次
+        _publish_role_progress(role, update=ProgressUpdate("starting","准备开始分析舆情话题",0))
         # 执行指定角色的研究agent
         try:
             await _execute_research_flow(query, role)
+            # 发布
+            pub_role_result(RoleResultEvent(role=role))
         except Exception as exc:
             # 发布失败
             logger.error(f"运行{role}失败: {exc}")
+            pub_role_result(RoleResultEvent(role=role, error=str(exc)))
 
 
 async def _execute_research_flow(role: str, query: str):
@@ -58,6 +65,7 @@ async def _execute_research_flow(role: str, query: str):
         lambda update: _publish_role_progress(role, update)
     )
 
+# 发布指定角色的进度更新回调事件
 def _publish_role_progress(role: str, update: ProgressUpdate):
     pub_role_progress(RoleProgressEvent(role=role,
                                         status= update.status,
