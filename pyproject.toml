@@ -18,6 +18,7 @@ dependencies = [
     "langgraph>=1.0.4",
     # Database (舆情库只读访问)
     "sqlalchemy>=2.0.43",
+    "greenlet>=3.2.4",
     "aiomysql>=0.3.2",
     "pymysql>=1.1.2",
     # Search & network
