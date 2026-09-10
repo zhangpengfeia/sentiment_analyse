@@ -18,7 +18,7 @@ from engines.insight_agent.tools.db_search.hotness import HotRecallPeriod
 RecordMapper = Callable[[dict[str, Any]], SearchRecord]
 
 
-class InsightSearchRepository:
+class DatabaseSearchRepository:
 
     async def hot_recall(self,time_period: HotRecallPeriod = 'week',limit: int = 20) -> SearchResponse:
         # 1. 构造 SQL查询语句
@@ -129,7 +129,7 @@ class InsightSearchRepository:
 
 async def main_test():
     from engines.insight_agent.tools.connection import close_async_engine
-    repo = InsightSearchRepository()
+    repo = DatabaseSearchRepository()
 
     # 1. 测试内容表关键词召回 (keyword_recall)
     # print("=" * 50)

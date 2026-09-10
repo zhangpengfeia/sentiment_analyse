@@ -94,7 +94,8 @@ class InsightRetrivalService:
     def filter_expr(self) -> str:
         days = get_settings().INSIGHT_VECTOR_FILTER_DAYS
         start_ts = int((datetime.now() - timedelta(days=days)).timestamp())
-        return f"published_at >= {start_ts}"
+        # Milvus 中该字段保存的是字符串形式的秒级时间戳。
+        return f'published_at >= "{start_ts}"'
 
     async def _retrival_db_evidence(self, retrival_db_tasks: list[RetrievalQueryTask]) -> list[EvidenceRecord]:
 

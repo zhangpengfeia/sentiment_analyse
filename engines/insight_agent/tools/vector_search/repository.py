@@ -15,7 +15,7 @@ from engines.insight_agent.tools.vector_search.schemas import (
 from engines.insight_agent.tools.vector_search.search_results import SearchHit, VectorDocument
 
 
-class VectorRepository:
+class VectorSearchRepository:
 
     def __init__(self) -> None:
         settings = config.get_settings()
@@ -139,7 +139,7 @@ class VectorRepository:
 
 if __name__ == '__main__':
 
-    rep= VectorRepository()
+    rep= VectorSearchRepository()
 
 
     response=rep.search(query="高考难吗?",limit=10)

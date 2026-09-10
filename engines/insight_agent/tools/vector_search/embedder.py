@@ -2,7 +2,6 @@ from functools import cached_property
 from dataclasses import dataclass
 from typing import Iterable
 
-from FlagEmbedding import BGEM3FlagModel
 
 
 @dataclass(frozen=True)
@@ -19,6 +18,14 @@ class BgeM3Embedder:
 
     @cached_property
     def _model(self):
+        try:
+            from FlagEmbedding import BGEM3FlagModel
+        except ModuleNotFoundError as exc:
+            if exc.name != "FlagEmbedding":
+                raise
+            raise RuntimeError(
+                "向量检索缺少 FlagEmbedding，请执行 uv sync --extra ml 并重启进程。"
+            ) from exc
 
         kwargs = {"use_fp16": True}
         if self.device:

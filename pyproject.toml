@@ -66,8 +66,9 @@ url = "https://download.pytorch.org/whl/cu128"
 explicit = true  # 明确指定，否则普通包不要来这里找
 
 [tool.uv.sources]
-torch = { index = "pytorch" }
-torchvision = { index = "pytorch" }
+# macOS 使用默认包源；CUDA 源仅用于其他平台。
+torch = { index = "pytorch", marker = "sys_platform != 'darwin'" }
+torchvision = { index = "pytorch", marker = "sys_platform != 'darwin'" }
 
 
 
