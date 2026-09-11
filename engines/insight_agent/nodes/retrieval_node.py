@@ -2,6 +2,7 @@
 from engines.insight_agent.tools.retrival_service import InsightRetrivalService
 from typing import Any
 from engines.insight_agent.state import InsightState
+from engines.insight_agent.evidence.models import EvidencePool
 from engines.common.nodes.base_node import ResearchNodeContext
 from engines.common.nodes.base_node import BaseNode
 
@@ -15,10 +16,12 @@ class RetrievalNode(BaseNode):
         user_query = state["query"]
         # 2. 调用检索服务
         retrival_service = InsightRetrivalService()
-        evidence_records = retrival_service.retrival_evidence(user_query)
+        evidence_records = await retrival_service.retrival_evidence(user_query)
 
         # 3. 获取state中的证据池
-        evidence_pool = state["evidence_pool"]
+        evidence_pool = state.get("evidence_pool")
+        if evidence_pool is None:
+            evidence_pool = EvidencePool(query=user_query)
         # 4. 更新证据池中的证据记录
         evidence_pool.records = evidence_records
 
