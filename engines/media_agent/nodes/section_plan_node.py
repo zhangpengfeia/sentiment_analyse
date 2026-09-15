@@ -32,7 +32,7 @@ class PlanNode(BaseNode):
 
         # 2. 调用LLM生成报告章节结构化大纲
         plan: MediaResearchPlan = await self.context.llm_client.generate_object(
-            PLAN_SYSTEM_PROMPT, user_prompt, MediaResearchPlan
+            PLAN_SYSTEM_PROMPT, user_prompt, MediaResearchPlan, extra_body={"enable_thinking": False}
         )
 
         # 3. 将LLM生成的报告章节大纲映射为五章节对象列表
