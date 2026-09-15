@@ -130,6 +130,8 @@ def _evaluate_evidence_strength(hit_count: int) -> EvidenceStrength:
 
 
 # ===== 发布章节内容事件构建 =====
+
+
 def dispatch_section_ready_event(
         state: Mapping[str, Any],
         section_index: int,

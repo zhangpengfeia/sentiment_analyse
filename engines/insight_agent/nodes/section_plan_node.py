@@ -29,7 +29,7 @@ class SectionPlanNode(BaseNode):
 
         # 2. 调用LLM生成报告章节结构化大纲
         plan: InsightResearchPlan = await self.context.llm_client.generate_object(
-            PLAN_SYSTEM_PROMPT, plan_user_prompt, InsightResearchPlan
+            PLAN_SYSTEM_PROMPT, plan_user_prompt, InsightResearchPlan,extra_body={"enable_thinking": False}
         )
 
         # 3. 将LLM生成的报告章节大纲映射为五章节对象列表
