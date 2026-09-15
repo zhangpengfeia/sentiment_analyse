@@ -110,8 +110,8 @@ def build_nodes(judge: "Judge") -> dict[str, Callable[..., Any]]:
         "parse_section": parse_section,
         "accumulate_section": accumulate_section,
         "find_ready_pairs": find_ready_pairs,
-        "judge_section": build_judge_section(judge),
+        "judge_section": build_judge_section(judge), # 闭包函数 judge = 直接调用大语言模型对象
         "record_judgement": record_judgement,
-        "generate_final_report": build_generate_final_report(judge),
+        "generate_final_report": build_generate_final_report(judge), # 闭包函数
         "save_report": save_report,
     }
