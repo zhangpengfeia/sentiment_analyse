@@ -7,7 +7,6 @@ from typing import Any
 @dataclass(frozen=True)
 class SectionResult:
     """单个 Agent 对某维度的章节研究结果(section_ready 事件载荷的领域投影)。"""
-
     source: str
     section_key: str
     title: str
@@ -34,7 +33,6 @@ class SectionResult:
 @dataclass(frozen=True)
 class SectionPair:
     """同一维度 insight + media 的配对,供主持人研判。"""
-
     section_key: str
     title: str
     insight: SectionResult
