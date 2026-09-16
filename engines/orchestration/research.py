@@ -1,14 +1,15 @@
-from engines.common.eventing.publishers import pub_role_result
-from engines.common.eventing.event import RoleResultEvent
+from engines.common.eventing.publishers import pub_role_result, pub_role_error
+from engines.common.eventing.event import RoleResultEvent, RoleErrorEvent
 from engines.common.eventing.event import RoleProgressEvent
 from engines.common.eventing.publishers import pub_role_progress
-from fastapi import logger
+from loguru import logger
 from engines.common.runtime.role_log import route_logs_by_role
 import asyncio
 from engines.media_agent.agent import invoke_media_agent
 from engines.insight_agent.agent import invoke_insight_agent
 from engines.common.progress import ProgressUpdate
-from engines.common.llm_client import LLMClient
+from engines.common.llm.llm_client import LLMClient
+from engines.common.io.report_io import research_report_dir
 from typing import Callable, Awaitable
 
 ProgressCallback = Callable[[ProgressUpdate], None]
@@ -40,13 +41,13 @@ async def _run_research_task(query: str, role: str) -> None:
         _publish_role_progress(role, update=ProgressUpdate("starting","准备开始分析舆情话题",0))
         # 执行指定角色的研究agent
         try:
-            await _execute_research_flow(query, role)
+            await _execute_research_flow(role=role, query=query)
             # 发布
             pub_role_result(RoleResultEvent(role=role))
         except Exception as exc:
             # 发布失败
             logger.error(f"运行{role}失败: {exc}")
-            pub_role_result(RoleResultEvent(role=role, error=str(exc)))
+            pub_role_error(RoleErrorEvent(role=role, error=str(exc)))
 
 
 async def _execute_research_flow(role: str, query: str):
@@ -54,7 +55,7 @@ async def _execute_research_flow(role: str, query: str):
     llm_client = LLMClient.from_role(role)
 
     # 2. 获取指定角色Agent的报告落盘目录
-    output_dir = ""
+    output_dir = str(research_report_dir(role))
 
     # 3. 运行指定角色的Agent[INSIGHT]
     await _RESEARCH_INVOKER[role](

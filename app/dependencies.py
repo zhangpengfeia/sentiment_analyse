@@ -22,12 +22,15 @@ def get_research_service():
 ResearchServiceDep = Annotated[ResearchService, Depends(get_research_service)]
 
 
+_host_service = HostService()
+
+
 def get_host_service():
     """
     获取主持人服务
     :return:
     """
-    return HostService()
+    return _host_service
 
 
 HostServiceDep = Annotated[HostService, Depends(get_host_service)]

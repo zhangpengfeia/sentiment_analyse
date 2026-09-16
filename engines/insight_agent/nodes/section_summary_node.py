@@ -9,7 +9,7 @@ from engines.insight_agent.state import InsightState, InsightSection
 from engines.insight_agent.evidence.models import SectionEvidencePack
 from engines.insight_agent.evidence.section import generate_section_evidence_pack, dispatch_section_ready_event
 from engines.insight_agent.prompts import SUMMARY_SYSTEM_PROMPT, SUMMARY_USER_PROMPT_TEMPLATE
-from engines.common.llm.llm_output import clean_markdown_text
+from engines.common.llm.llm_output import sanitize_markdown
 
 from langchain_core.prompts import PromptTemplate
 
@@ -78,7 +78,7 @@ class SectionSummarizeNode(BaseNode):
 
         try:
             body = await self.context.llm_client.generate_text(SUMMARY_SYSTEM_PROMPT, prompt)
-            return clean_markdown_text(body)
+            return sanitize_markdown(body)
         except Exception as exc:
             logger.error(f"[insight私域检索专家] 章节写作 LLM 异常: {exc}")
             return FALLBACK_BODY

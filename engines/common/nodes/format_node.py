@@ -7,7 +7,7 @@ from loguru import logger
 from langchain_core.prompts import PromptTemplate
 
 from engines.common.nodes.base_node import BaseNode
-from engines.common.llm.llm_output import clean_markdown_text
+from engines.common.llm.llm_output import sanitize_markdown
 from engines.contracts.roles import ROLE_INFOS, RoleInfo
 from engines.insight_agent.state import InsightState
 
@@ -60,7 +60,7 @@ class FormatReportNode(BaseNode):
                 system_prompt=system_prompt,
                 user_prompt="请严格按照上述要求和输入数据，输出最终的 Markdown 报告正文。"
             )
-            cleaned_text = clean_markdown_text(raw_text)
+            cleaned_text = sanitize_markdown(raw_text)
             return cleaned_text if cleaned_text else None
         except Exception as exc:
             logger.error(f"LLM 报告生成失败: {exc}")

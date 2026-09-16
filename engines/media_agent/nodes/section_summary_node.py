@@ -6,7 +6,7 @@ from typing import Any
 
 from loguru import logger
 from engines.common.nodes.base_node import BaseNode
-from engines.common.llm.llm_output import clean_markdown_text
+from engines.common.llm.llm_output import sanitize_markdown
 from engines.media_agent.evidence_processor import (
     dispatch_section_ready_event,
     generate_section_evidence_pack,
@@ -85,7 +85,7 @@ class SectionSummarizeNode(BaseNode):
             body = await self.context.llm_client.generate_text(
                 SUMMARY_SYSTEM_PROMPT, user_prompt
             )
-            return clean_markdown_text(body)
+            return sanitize_markdown(body)
         except Exception as exc:
             logger.error(f"[media] 章节写作 LLM 调用失败: {exc}")
             return FALLBACK_BODY
