@@ -16,7 +16,7 @@ from langchain_core.prompts import PromptTemplate
 class Judge:
     llm: LLMClient = field(default_factory=lambda: LLMClient.from_role("host"))
 
-    async def judge_section(
+    async def  judge_section(
             self,
             pair: SectionPair,
             previous: list[SectionJudgement],

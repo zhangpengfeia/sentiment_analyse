@@ -83,5 +83,5 @@ def _quality_score(result: SectionResult) -> tuple[int, int, int]:
 
 if __name__ == '__main__':
     _done = { "heat_and_spread", "sentiment_and_opinion", "platform_and_group_diff",
-             "deep_causes_and_impact"}
-    print(_done.issuperset(DIMENSIONS.keys()))
+             "deep_causes_and_impact", "background_overview"}
+    print(_done.issuperset(DIMENSIONS.keys())) # 维度检测

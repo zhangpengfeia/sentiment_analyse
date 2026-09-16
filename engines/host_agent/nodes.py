@@ -79,7 +79,7 @@ def build_judge_section(judge: "Judge") -> Callable[[State], Any]:
 
 
 def build_generate_final_report(judge: "Judge") -> Callable[[State], Any]:
-    """LLM 生成最终裁判报告;发 host 最终事件。"""
+    """LLM 生成最终裁判报告;发 host 最终事件。""" 
 
     async def generate_final_report(state: State) -> State:
         report = await judge.generate_final_report(list(state.get("judgements", [])))

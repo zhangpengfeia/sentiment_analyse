@@ -7,6 +7,7 @@ from typing import Any
 
 from langgraph.graph import END, START, StateGraph
 
+from engines.host_agent.judge import Judge
 from engines.host_agent.nodes import build_nodes
 from engines.host_agent.state import State
 
